@@ -1,0 +1,716 @@
+  /* ===== VARIÁVEIS DO TEMA GOI/VIVO ===== */
+  :root {
+      /* Cores Institucionais */
+      --vivo-blue: #00a8e1;
+      --vivo-blue-dark: #0088b5;
+      --vivo-blue-light: #e6f7fb;
+      --vivo-red: #e30613;
+      --vivo-green: #00b359;
+      --vivo-yellow: #ffc72c;
+      --vivo-gray: #666666;
+      --vivo-gray-light: #f5f5f5;
+      --vivo-gray-border: #dddddd;
+
+      /* Layout */
+      --sidebar-width: 260px;
+      --header-height: 70px;
+      --card-radius: 4px;
+      --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.08);
+      --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.12);
+
+      /* Tipografia */
+      --font-main: 'Open Sans', 'Segoe UI', system-ui, sans-serif;
+      --font-mono: 'Consolas', 'Monaco', monospace;
+  }
+
+  /* ===== RESET E BASE ===== */
+  * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+  }
+
+  body {
+      font-family: var(--font-main);
+      background: var(--vivo-gray-light);
+      color: #333;
+      line-height: 1.5;
+      min-height: 100vh;
+  }
+
+  /* ===== SIDEBAR (Estilo GOI) ===== */
+  .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: var(--sidebar-width);
+      height: 100vh;
+      background: #1a1a2e;
+      color: #fff;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-md);
+  }
+
+  .sidebar-brand {
+      padding: 20px;
+      background: var(--vivo-blue);
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .sidebar-brand h3 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+  }
+
+  .sidebar-brand small {
+      font-size: 0.75rem;
+      opacity: 0.9;
+      display: block;
+      margin-top: 4px;
+  }
+
+  .sidebar-menu {
+      flex: 1;
+      padding: 15px 0;
+      overflow-y: auto;
+  }
+
+  .nav-item {
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: rgba(255, 255, 255, 0.85);
+      text-decoration: none;
+      transition: all 0.2s;
+      border-left: 3px solid transparent;
+      cursor: pointer;
+  }
+
+  .nav-item:hover,
+  .nav-item.active {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border-left-color: var(--vivo-blue);
+  }
+
+  .nav-item i {
+      width: 20px;
+      text-align: center;
+      font-size: 1.1rem;
+  }
+
+  .nav-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 15px 20px 8px;
+      color: rgba(255, 255, 255, 0.5);
+      font-weight: 600;
+  }
+
+  /* ===== HEADER (Estilo GOI) ===== */
+  .header {
+      position: fixed;
+      left: var(--sidebar-width);
+      right: 0;
+      top: 0;
+      height: var(--header-height);
+      background: #fff;
+      border-bottom: 1px solid var(--vivo-gray-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      z-index: 999;
+      box-shadow: var(--shadow-sm);
+  }
+
+  .header-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+  }
+
+  .header-title h2 {
+      font-size: 1.2rem;
+      color: #333;
+      font-weight: 600;
+  }
+
+  .breadcrumb {
+      font-size: 0.85rem;
+      color: var(--vivo-gray);
+  }
+
+  .breadcrumb a {
+      color: var(--vivo-blue);
+      text-decoration: none;
+  }
+
+  .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+  }
+
+  .header-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: none;
+      background: var(--vivo-gray-light);
+      color: #666;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+  }
+
+  .header-btn:hover {
+      background: var(--vivo-blue-light);
+      color: var(--vivo-blue);
+  }
+
+  .header-btn .badge {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--vivo-red);
+      color: #fff;
+      font-size: 0.7rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+  }
+
+  .user-menu {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      padding: 8px 12px;
+      border-radius: 6px;
+      transition: background 0.2s;
+  }
+
+  .user-menu:hover {
+      background: var(--vivo-gray-light);
+  }
+
+  .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--vivo-blue);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 0.9rem;
+  }
+
+  .user-name {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #333;
+  }
+
+  /* ===== MAIN CONTENT ===== */
+  .main-content {
+      margin-left: var(--sidebar-width);
+      margin-top: var(--header-height);
+      padding: 24px;
+      min-height: calc(100vh - var(--header-height));
+  }
+
+  /* ===== CARDS (Estilo GOI) ===== */
+  .card {
+      background: #fff;
+      border-radius: var(--card-radius);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 20px;
+      border: 1px solid var(--vivo-gray-border);
+  }
+
+  .card-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--vivo-gray-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #fafafa;
+  }
+
+  .card-header h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #333;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+  }
+
+  .card-header.alert-success {
+      background: #d4edda;
+      border-bottom-color: #c3e6cb;
+      color: #155724;
+  }
+
+  .card-header.alert-info {
+      background: var(--vivo-blue-light);
+      border-bottom-color: var(--vivo-blue);
+      color: var(--vivo-blue-dark);
+  }
+
+  .card-body {
+      padding: 20px;
+  }
+
+  /* ===== FORMULÁRIOS ===== */
+  .form-group {
+      margin-bottom: 16px;
+  }
+
+  .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 500;
+      font-size: 0.9rem;
+      color: #333;
+  }
+
+  .form-control {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--vivo-gray-border);
+      border-radius: 4px;
+      font-size: 0.95rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .form-control:focus {
+      outline: none;
+      border-color: var(--vivo-blue);
+      box-shadow: 0 0 0 3px rgba(0, 168, 225, 0.15);
+  }
+
+  .form-select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      background-size: 16px;
+      padding-right: 36px;
+  }
+
+  .form-hint {
+      font-size: 0.8rem;
+      color: var(--vivo-gray);
+      margin-top: 4px;
+      display: block;
+  }
+
+  .form-hint i {
+      margin-right: 4px;
+  }
+
+  /* ===== BOTÕES (Estilo GOI) ===== */
+  .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+  }
+
+  .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+  }
+
+  .btn-primary {
+      background: var(--vivo-blue);
+      color: #fff;
+  }
+
+  .btn-primary:hover:not(:disabled) {
+      background: var(--vivo-blue-dark);
+  }
+
+  .btn-success {
+      background: var(--vivo-green);
+      color: #fff;
+  }
+
+  .btn-success:hover:not(:disabled) {
+      background: #00994d;
+  }
+
+  .btn-warning {
+      background: var(--vivo-yellow);
+      color: #333;
+  }
+
+  .btn-warning:hover:not(:disabled) {
+      background: #e6b400;
+  }
+
+  .btn-outline-success {
+      background: transparent;
+      color: var(--vivo-green);
+      border: 1px solid var(--vivo-green);
+  }
+
+  .btn-outline-success:hover:not(:disabled) {
+      background: var(--vivo-green);
+      color: #fff;
+  }
+
+  .btn-group {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+  }
+
+  .btn-group .btn {
+      flex: 1;
+      min-width: 140px;
+  }
+
+  /* ===== STATUS E LOGS ===== */
+  .status-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 0;
+      border-top: 1px solid var(--vivo-gray-border);
+      margin-top: 16px;
+  }
+
+  .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #ccc;
+  }
+
+  .status-dot.idle {
+      background: #ccc;
+  }
+
+  .status-dot.running {
+      background: var(--vivo-green);
+      box-shadow: 0 0 0 4px rgba(0, 179, 89, 0.2);
+      animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+
+      0%,
+      100% {
+          box-shadow: 0 0 0 4px rgba(0, 179, 89, 0.2);
+      }
+
+      50% {
+          box-shadow: 0 0 0 8px rgba(0, 179, 89, 0);
+      }
+  }
+
+  .logs {
+      background: #1e1e1e;
+      color: #e0e0e0;
+      height: 280px;
+      overflow-y: auto;
+      padding: 12px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      white-space: pre-wrap;
+      border: 1px solid #333;
+  }
+
+  .log-line {
+      margin-bottom: 4px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid #333;
+  }
+
+  .log-info {
+      color: var(--vivo-blue);
+  }
+
+  .log-success {
+      color: var(--vivo-green);
+  }
+
+  .log-warn {
+      color: var(--vivo-yellow);
+  }
+
+  .log-error {
+      color: var(--vivo-red);
+  }
+
+  .timestamp {
+      color: #888;
+      margin-right: 8px;
+  }
+
+  /* ===== UTILITÁRIOS ===== */
+  .hidden {
+      display: none !important;
+  }
+
+  .text-center {
+      text-align: center;
+  }
+
+  .text-danger {
+      color: var(--vivo-red);
+  }
+
+  .text-success {
+      color: var(--vivo-green);
+  }
+
+  .text-info {
+      color: var(--vivo-blue);
+  }
+
+  .mt-2 {
+      margin-top: 8px;
+  }
+
+  .mb-2 {
+      margin-bottom: 8px;
+  }
+
+  /* ===== RESPONSIVO ===== */
+  @media (max-width: 992px) {
+      .sidebar {
+          transform: translateX(-100%);
+          transition: transform 0.3s;
+      }
+
+      .sidebar.open {
+          transform: translateX(0);
+      }
+
+      .header {
+          left: 0;
+      }
+
+      .main-content {
+          margin-left: 0;
+      }
+
+      .btn-group {
+          flex-direction: column;
+      }
+
+      .btn-group .btn {
+          min-width: 100%;
+      }
+  }
+
+  /* ===== ANIMAÇÕES ===== */
+  @keyframes slideDown {
+      from {
+          opacity: 0;
+          transform: translateY(-10px);
+          max-height: 0;
+      }
+
+      to {
+          opacity: 1;
+          transform: translateY(0);
+          max-height: 200px;
+      }
+  }
+
+  .param-fields:not(.hidden) {
+      animation: slideDown 0.25s ease-out;
+  }
+
+  /* Cards de tarefa independentes */
+.task-card {
+  transition: transform 0.2s, box-shadow 0.2s;
+  border-left: 4px solid var(--vivo-blue);
+}
+
+.task-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.task-card[data-task="GOI_CHECK"] { border-left-color: #28a745; }
+.task-card[data-task="WFM_CPF"] { border-left-color: #17a2b8; }
+.task-card[data-task="GPS_OPEN"] { border-left-color: #ffc107; }
+.task-card[data-task="FULL"] { border-left-color: #dc3545; }
+
+/* Header dos cards com botão de executar */
+.card-header-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
+.btn-run {
+  background: var(--vivo-blue);
+  color: white;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-run:hover {
+  background: var(--vivo-blue-dark);
+  transform: scale(1.05);
+}
+
+.btn-run:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Footer de cada task */
+.task-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(0,0,0,0.05);
+}
+
+.task-status {
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.task-status.idle { color: #6c757d; }
+.task-status.running { color: #0d6efd; animation: pulse 1.5s infinite; }
+.task-status.success { color: #28a745; }
+.task-status.error { color: #dc3545; }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Seleção de modo global */
+.mode-selector {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.mode-btn {
+  flex: 1;
+  padding: 12px;
+  border: 2px solid #dee2e6;
+  border-radius: 8px;
+  background: white;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mode-btn:hover {
+  border-color: var(--vivo-blue);
+  background: #f8f9fa;
+}
+
+.mode-btn.active {
+  border-color: var(--vivo-blue);
+  background: rgba(23, 162, 184, 0.1);
+  box-shadow: 0 0 0 3px rgba(23, 162, 184, 0.2);
+}
+
+.mode-btn[data-mode="PROD"].active {
+  border-color: #28a745;
+  background: rgba(40, 167, 69, 0.1);
+  box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.2);
+}
+
+.mode-btn strong {
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.mode-btn small {
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+/* Inputs do FULL em linha */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 768px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .mode-selector {
+    flex-direction: column;
+  }
+  
+  .card-header-content {
+    flex-wrap: wrap;
+  }
+}
+
+/* Logs com filtro por task */
+.log-entry {
+  padding: 6px 10px;
+  border-left: 3px solid transparent;
+  margin-bottom: 4px;
+  background: #f8f9fa;
+  border-radius: 0 4px 4px 0;
+  font-family: monospace;
+  font-size: 0.85rem;
+}
+
+.log-entry[data-task="GOI_CHECK"] { border-left-color: #28a745; }
+.log-entry[data-task="WFM_CPF"] { border-left-color: #17a2b8; }
+.log-entry[data-task="GPS_OPEN"] { border-left-color: #ffc107; }
+.log-entry[data-task="FULL"] { border-left-color: #dc3545; }
+
+.log-entry.hidden { display: none; }
