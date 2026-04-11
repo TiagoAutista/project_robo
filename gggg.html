@@ -1,0 +1,770 @@
+<!doctype html>
+<html lang="pt-BR" data-bs-theme="light">
+<!-- 📄 [HEAD] Configuração do documento, metadados, viewport e importação de estilos externos (Bootstrap, ícones, fontes Google e CSS customizado) -->
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta
+name="description"
+content="Dashboard de Automação Corporativa v2.0"
+/>
+<title>Auto Robô v2.0 | Dashboard</title>
+<!-- Bootstrap 5 CSS -->
+<link
+href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+rel="stylesheet"
+/>
+<!-- Bootstrap Icons -->
+<link
+rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+/>
+<!-- Google Fonts: Inter -->
+<link
+href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap"
+rel="stylesheet"
+/>
+<!-- Custom CSS -->
+<link rel="stylesheet" href="src/css/style.css" />
+</head>
+<body>
+<!-- 📋 [SIDEBAR] Menu lateral de navegação fixo, contendo branding da aplicação, links de acesso rápido, seletor de ambiente (DEV/PROD) e indicador de status de rede -->
+<aside class="sidebar d-flex flex-column" id="sidebar">
+<div
+class="sidebar-brand p-3 border-bottom d-flex align-items-center gap-2"
+>
+<i class="bi bi-robot text-primary fs-3"></i>
+<div>
+<h5 class="mb-0 fw-bold">Auto Robô</h5>
+<small class="text-muted">v2.0 • Enterprise</small>
+</div>
+</div>
+x'
+<nav class="nav flex-column mt-3 flex-grow-1">
+<a class="nav-link active" href="#dashboard"
+><i class="bi bi-grid me-2"></i> Dashboard</a
+>
+<a class="nav-link" href="#queuePanel"
+><i class="bi bi-list-check me-2"></i> Fila de Tarefas</a
+>
+<div class="my-2 border-top mx-3"></div>
+<small
+class="text-uppercase text-muted fw-bold px-3 mt-2 mb-1"
+style="font-size: 0.75rem"
+>Processos</small
+>
+<a class="nav-link" href="#task-GOI_CHECK"
+><i class="bi bi-search me-2"></i> Consultar GOI</a
+>
+<a class="nav-link" href="#task-WFM_CPF"
+><i class="bi bi-person-vcard me-2"></i> Buscar WFM</a
+>
+<a class="nav-link" href="#task-GPS_OPEN"
+><i class="bi bi-map me-2"></i> Abrir GPS</a
+>
+<a class="nav-link" href="#task-FULL"
+><i class="bi bi-lightning-charge me-2"></i> Automação Completa</a
+>
+</nav>
+<div class="p-3 border-top bg-light">
+<div class="d-flex justify-content-between align-items-center mb-2">
+<small class="text-muted">Modo:</small>
+<span class="badge bg-secondary" id="globalModeLabel">DEV</span>
+</div>
+<div class="d-flex align-items-center gap-2">
+<i class="bi bi-wifi text-success"></i>
+<small class="text-muted" id="onlineStatus">Online</small>
+</div>
+</div>
+</aside>
+<!-- 📦 [MAIN WRAPPER] Container principal que envolve o cabeçalho e o conteúdo da página, permitindo o efeito de sidebar colapsável -->
+<div class="main-wrapper">
+<!-- 🔝 [HEADER] Barra de navegação superior fixa com título da página, botões de ação rápida (notificações, diagnóstico, tema) e menu suspenso do usuário -->
+<header
+class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top px-4"
+>
+<div class="d-flex align-items-center w-100 justify-content-between">
+<div class="d-flex align-items-center gap-3">
+<button
+class="btn btn-outline-secondary d-md-none"
+id="toggleSidebar"
+>
+<i class="bi bi-list"></i>
+</button>
+<h1 class="h5 mb-0 fw-bold text-dark">Dashboard de Automação</h1>
+</div>
+<div class="d-flex align-items-center gap-2">
+<button
+class="btn btn-light btn-sm position-relative"
+id="notifBtn"
+>
+<i class="bi bi-bell"></i>
+<span
+class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger d-none"
+id="notifCount"
+>0</span
+>
+</button>
+<button
+class="btn btn-light btn-sm"
+onclick="App.runDiagnostics()"
+title="Diagnóstico"
+>
+<i class="bi bi-stethoscope"></i>
+</button>
+<button
+class="btn btn-light btn-sm"
+id="themeToggle"
+title="Alternar Tema"
+>
+<i class="bi bi-moon-stars"></i>
+</button>
+<div class="vr mx-2"></div>
+<div class="dropdown">
+<button
+class="btn btn-light btn-sm dropdown-toggle d-flex align-items-center gap-2"
+type="button"
+data-bs-toggle="dropdown"
+>
+<div
+class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
+style="width: 24px; height: 24px; font-size: 0.8rem"
+>
+TS
+</div>
+<span class="d-none d-sm-inline">Tiago Santos</span>
+</button>
+<ul class="dropdown-menu dropdown-menu-end">
+<li><a class="dropdown-item" href="#">Perfil</a></li>
+<li>
+<a
+class="dropdown-item"
+href="#"
+data-bs-toggle="modal"
+data-bs-target="#configModal"
+>Configurações</a
+>
+</li>
+<li>
+<hr class="dropdown-divider" />
+</li>
+<li><a class="dropdown-item text-danger" href="#">Sair</a></li>
+</ul>
+</div>
+</div>
+</div>
+</header>
+<!-- 🖥️ [MAIN CONTENT] Área central do dashboard onde são renderizados os widgets, formulários de tarefas e painéis de monitoramento -->
+<main class="main-content p-4" id="main-content">
+<!-- 📊 [MÉTRICAS] Grid de indicadores-chave de desempenho (KPIs) exibindo sucessos, falhas, tempo médio de execução e status de conexão -->
+<section class="row g-3 mb-4">
+<div class="col-md-3">
+<div class="card border-0 shadow-sm h-100">
+<div class="card-body d-flex align-items-center">
+<div
+class="bg-success bg-opacity-10 text-success p-3 rounded me-3"
+>
+<i class="bi bi-check-circle-fill fs-4"></i>
+</div>
+<div>
+<h6 class="text-muted mb-1 small text-uppercase fw-bold">
+Sucessos
+</h6>
+<h3 class="mb-0 fw-bold" id="metricSuccess">0</h3>
+</div>
+</div>
+</div>
+</div>
+<div class="col-md-3">
+<div class="card border-0 shadow-sm h-100">
+<div class="card-body d-flex align-items-center">
+<div
+class="bg-warning bg-opacity-10 text-warning p-3 rounded me-3"
+>
+<i class="bi bi-exclamation-triangle-fill fs-4"></i>
+</div>
+<div>
+<h6 class="text-muted mb-1 small text-uppercase fw-bold">
+Falhas
+</h6>
+<h3 class="mb-0 fw-bold" id="metricFailed">0</h3>
+</div>
+</div>
+</div>
+</div>
+<div class="col-md-3">
+<div class="card border-0 shadow-sm h-100">
+<div class="card-body d-flex align-items-center">
+<div class="bg-info bg-opacity-10 text-info p-3 rounded me-3">
+<i class="bi bi-stopwatch-fill fs-4"></i>
+</div>
+<div>
+<h6 class="text-muted mb-1 small text-uppercase fw-bold">
+Tempo Médio
+</h6>
+<h3 class="mb-0 fw-bold" id="metricAvgTime">--s</h3>
+</div>
+</div>
+</div>
+</div>
+<div class="col-md-3">
+<div class="card border-0 shadow-sm h-100">
+<div class="card-body d-flex align-items-center">
+<div
+class="bg-secondary bg-opacity-10 text-secondary p-3 rounded me-3"
+>
+<i class="bi bi-wifi fs-4"></i>
+</div>
+<div>
+<h6 class="text-muted mb-1 small text-uppercase fw-bold">
+Conexão
+</h6>
+<h3 class="mb-0 fw-bold" id="metricStatus">Online</h3>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 🎛️ [MODO DE EXECUÇÃO] Seletor de ambiente (Desenvolvimento/Produção) com indicador visual de status e feedback de configuração -->
+<section class="card border-0 shadow-sm mb-4">
+<div class="card-header bg-white py-3">
+<h5 class="mb-0 fw-bold">
+<i class="bi bi-sliders me-2"></i>Ambiente de Execução
+</h5>
+</div>
+<div class="card-body">
+<div
+class="btn-group w-100 w-md-auto"
+role="group"
+aria-label="Selecione o ambiente"
+>
+<input
+type="radio"
+class="btn-check"
+name="envmode"
+id="modeDEV"
+autocomplete="off"
+checked
+data-mode="DEV"
+/>
+<label class="btn btn-outline-primary" for="modeDEV">
+<i class="bi bi-vial me-1"></i> <strong>DEV</strong>
+<span class="d-none d-sm-inline text-muted ms-1"
+>• Mock Local</span
+>
+</label>
+<input
+type="radio"
+class="btn-check"
+name="envmode"
+id="modePROD"
+autocomplete="off"
+data-mode="PROD"
+/>
+<label class="btn btn-outline-primary" for="modePROD">
+<i class="bi bi-building me-1"></i> <strong>PROD</strong>
+<span class="d-none d-sm-inline text-muted ms-1"
+>• Rede Corporativa</span
+>
+</label>
+</div>
+<div class="mt-3 d-flex align-items-center gap-2">
+<span
+class="spinner-border spinner-border-sm text-secondary"
+role="status"
+aria-hidden="true"
+id="globalStatusDot"
+style="width: 10px; height: 10px"
+></span>
+<small class="text-muted" id="globalStatusText"
+>Ambiente configurado. Aguardando comando.</small
+>
+</div>
+</div>
+</section>
+<div class="row g-4">
+<!-- 📐 [COLUNA ESQUERDA] Layout responsível para agrupamento dos cards de tarefas e do painel de fila de execução -->
+<div class="col-lg-8">
+<!-- 🔧 [GRID DE TAREFAS] Cartões interativos para execução de processos específicos (GOI, WFM, GPS) e automação completa, com campos de entrada e histórico recente -->
+<section class="row g-3 mb-4">
+<!-- GOI -->
+<div class="col-md-6">
+<article class="card h-100 task-card" id="task-GOI_CHECK">
+<div
+class="card-header bg-white d-flex justify-content-between align-items-center py-3"
+>
+<h6 class="mb-0 fw-bold text-success">
+<i class="bi bi-search me-2"></i>Consultar GOI
+</h6>
+<button
+class="btn btn-sm btn-success rounded-circle"
+onclick="App.runTask('GOI_CHECK')"
+title="Executar"
+>
+<i class="bi bi-play-fill"></i>
+</button>
+</div>
+<div class="card-body">
+<div class="mb-3">
+<label class="form-label small text-muted"
+>Número da Ordem / ID</label
+>
+<input
+type="text"
+class="form-control"
+id="goiOrder"
+placeholder="Ex: ORD-123456"
+/>
+</div>
+<details class="mb-2">
+<summary class="small text-muted cursor-pointer">
+Recentes
+</summary>
+<div class="history-chips mt-2"></div>
+</details>
+<div
+class="d-flex justify-content-between align-items-center mt-3"
+>
+<span
+class="badge bg-light text-dark border"
+id="status-GOI_CHECK"
+>Pronto</span
+>
+<button
+class="btn btn-link btn-sm text-muted p-0"
+onclick="App.clearTask('GOI_CHECK')"
+>
+<i class="bi bi-eraser"></i>
+</button>
+</div>
+</div>
+</article>
+</div>
+<!-- WFM -->
+<div class="col-md-6">
+<article class="card h-100 task-card" id="task-WFM_CPF">
+<div
+class="card-header bg-white d-flex justify-content-between align-items-center py-3"
+>
+<h6 class="mb-0 fw-bold text-info">
+<i class="bi bi-person-vcard me-2"></i>Buscar WFM
+</h6>
+<button
+class="btn btn-sm btn-info text-white rounded-circle"
+onclick="App.runTask('WFM_CPF')"
+title="Executar"
+>
+<i class="bi bi-play-fill"></i>
+</button>
+</div>
+<div class="card-body">
+<div class="mb-3">
+<label class="form-label small text-muted"
+>CPF do Cliente</label
+>
+<input
+type="text"
+class="form-control"
+id="wfmCpf"
+placeholder="000.000.000-00"
+/>
+</div>
+<details class="mb-2">
+<summary class="small text-muted cursor-pointer">
+Recentes
+</summary>
+<div class="history-chips mt-2"></div>
+</details>
+<div
+class="d-flex justify-content-between align-items-center mt-3"
+>
+<span
+class="badge bg-light text-dark border"
+id="status-WFM_CPF"
+>Pronto</span
+>
+<button
+class="btn btn-link btn-sm text-muted p-0"
+onclick="App.clearTask('WFM_CPF')"
+>
+<i class="bi bi-eraser"></i>
+</button>
+</div>
+</div>
+</article>
+</div>
+<!-- GPS -->
+<div class="col-md-6">
+<article class="card h-100 task-card" id="task-GPS_OPEN">
+<div
+class="card-header bg-white d-flex justify-content-between align-items-center py-3"
+>
+<h6 class="mb-0 fw-bold text-warning">
+<i class="bi bi-map me-2"></i>Abrir GPS
+</h6>
+<button
+class="btn btn-sm btn-warning text-white rounded-circle"
+onclick="App.runTask('GPS_OPEN')"
+title="Executar"
+>
+<i class="bi bi-play-fill"></i>
+</button>
+</div>
+<div class="card-body">
+<div class="mb-3">
+<label class="form-label small text-muted"
+>Parâmetro (Opcional)</label
+>
+<input
+type="text"
+class="form-control"
+id="gpsParam"
+placeholder="ID ou Coordenadas"
+/>
+</div>
+<details class="mb-2">
+<summary class="small text-muted cursor-pointer">
+Recentes
+</summary>
+<div class="history-chips mt-2"></div>
+</details>
+<div
+class="d-flex justify-content-between align-items-center mt-3"
+>
+<span
+class="badge bg-light text-dark border"
+id="status-GPS_OPEN"
+>Pronto</span
+>
+<button
+class="btn btn-link btn-sm text-muted p-0"
+onclick="App.clearTask('GPS_OPEN')"
+>
+<i class="bi bi-eraser"></i>
+</button>
+</div>
+</div>
+</article>
+</div>
+<!-- FULL -->
+<div class="col-md-6">
+<article
+class="card h-100 task-card border-primary"
+id="task-FULL"
+>
+<div
+class="card-header bg-primary bg-opacity-10 d-flex justify-content-between align-items-center py-3"
+>
+<h6 class="mb-0 fw-bold text-primary">
+<i class="bi bi-lightning-charge me-2"></i>Automação
+Completa
+</h6>
+<button
+class="btn btn-sm btn-primary rounded-circle"
+onclick="App.runTask('FULL')"
+title="Executar"
+>
+<i class="bi bi-play-fill"></i>
+</button>
+</div>
+<div class="card-body">
+<div class="row g-2 mb-3">
+<div class="col-6">
+<input
+type="text"
+class="form-control form-control-sm"
+id="fullCpf"
+placeholder="CPF"
+/>
+</div>
+<div class="col-6">
+<input
+type="text"
+class="form-control form-control-sm"
+id="fullOrder"
+placeholder="Ordem"
+/>
+</div>
+</div>
+<div class="progress mb-2" style="height: 4px">
+<div
+class="progress-bar progress-bar-striped progress-bar-animated"
+role="progressbar"
+style="width: 0%"
+></div>
+</div>
+<small class="text-muted d-block mb-2"
+><i class="bi bi-arrow-repeat"></i> Fluxo sequencial com
+rollback</small
+>
+<div
+class="d-flex justify-content-between align-items-center"
+>
+<span
+class="badge bg-light text-dark border"
+id="status-FULL"
+>Pronto</span
+>
+<button
+class="btn btn-link btn-sm text-muted p-0"
+onclick="App.clearTask('FULL')"
+>
+<i class="bi bi-eraser"></i>
+</button>
+</div>
+</div>
+</article>
+</div>
+</section>
+<!-- 📦 [FILA DE TAREFAS] Painel de gerenciamento da fila de execução, com lista dinâmica, controles de pausa/limpeza e barra de progresso global -->
+<section class="card border-0 shadow-sm" id="queuePanel">
+<div
+class="card-header bg-white py-3 d-flex justify-content-between align-items-center"
+>
+<h6 class="mb-0 fw-bold">
+<i class="bi bi-list-check me-2"></i>Fila de Execução
+</h6>
+<div class="btn-group btn-group-sm">
+<button
+class="btn btn-outline-warning"
+onclick="App.queue.pause()"
+>
+<i class="bi bi-pause"></i>
+</button>
+<button
+class="btn btn-outline-danger"
+onclick="App.queue.clear()"
+>
+<i class="bi bi-trash"></i>
+</button>
+</div>
+</div>
+<div class="card-body p-0">
+<ul
+class="list-group list-group-flush"
+id="queueList"
+style="max-height: 250px; overflow-y: auto"
+>
+<li
+class="list-group-item text-center text-muted py-4"
+id="emptyQueueMsg"
+>
+Fila vazia. Adicione tarefas pelo dashboard.
+</li>
+</ul>
+<div class="p-2 bg-light border-top">
+<progress
+id="queueProgress"
+class="progress w-100"
+max="100"
+value="0"
+style="height: 4px"
+></progress>
+</div>
+</div>
+</section>
+</div>
+<!-- 📐 [COLUNA DIREITA] Layout responsível para agrupamento do console de logs e painel de informações/atalhos -->
+<div class="col-lg-4">
+<!-- 📝 [LOGS] Console de registro de eventos do sistema, com scroll vertical, opções de filtro por tipo e botão para exportação em CSV -->
+<section class="card border-0 shadow-sm mb-4 h-100">
+<div
+class="card-header bg-dark text-white py-2 d-flex justify-content-between align-items-center"
+>
+<small class="fw-bold"
+><i class="bi bi-terminal me-2"></i>Logs do Sistema</small
+>
+<div class="dropdown">
+<button
+class="btn btn-xs btn-outline-secondary dropdown-toggle"
+type="button"
+data-bs-toggle="dropdown"
+>
+Filtro
+</button>
+<ul
+class="dropdown-menu dropdown-menu-dark dropdown-menu-end"
+>
+<li>
+<a
+class="dropdown-item"
+href="#"
+onclick="App.filterLogs('all')"
+>Todos</a
+>
+</li>
+<li>
+<a
+class="dropdown-item"
+href="#"
+onclick="App.filterLogs('error')"
+>Erros</a
+>
+</li>
+</ul>
+</div>
+</div>
+<div class="card-body p-0">
+<div id="logs" class="log-console p-3" role="log">
+<div class="log-entry text-muted fst-italic">
+Aguardando execuções...
+</div>
+</div>
+</div>
+<div class="card-footer bg-white py-2">
+<button
+class="btn btn-sm btn-outline-secondary w-100"
+onclick="App.exportLogs('csv')"
+>
+<i class="bi bi-download me-1"></i> Exportar CSV
+</button>
+</div>
+</section>
+<!-- ℹ️ [INFO & ATALHOS] Painel informativo com alertas de conformidade, URL de destino e lista de atalhos de teclado para navegação rápida -->
+<section class="card border-0 shadow-sm">
+<div class="card-body">
+<div class="alert alert-light border mb-3">
+<i
+class="bi bi-exclamation-triangle-fill text-danger me-2"
+></i>
+<small
+>Use apenas em ambiente autorizado.<br /><code
+>https://goi.vivo.com.br</code
+></small
+>
+</div>
+<h6 class="fw-bold mb-2">Atalhos de Teclado</h6>
+<ul class="list-unstyled small text-muted mb-0">
+<li class="d-flex justify-content-between mb-1">
+<span>Foco GOI</span>
+<kbd class="bg-light border">Ctrl + 1</kbd>
+</li>
+<li class="d-flex justify-content-between mb-1">
+<span>Foco WFM</span>
+<kbd class="bg-light border">Ctrl + 2</kbd>
+</li>
+<li class="d-flex justify-content-between mb-1">
+<span>Executar</span>
+<kbd class="bg-light border">Ctrl + Enter</kbd>
+</li>
+<li class="d-flex justify-content-between">
+<span>Cancelar</span> <kbd class="bg-light border">Esc</kbd>
+</li>
+</ul>
+</div>
+</section>
+</div>
+</div>
+</main>
+</div>
+<!-- 🔔 [MODAL TELEMETRIA] Diálogo de consentimento para ativação opcional de coleta anônima de métricas de uso, bloqueando interação até resposta -->
+<div
+class="modal fade"
+id="telemetryModal"
+tabindex="-1"
+data-bs-backdrop="static"
+data-bs-keyboard="false"
+>
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title">
+<i class="bi bi-graph-up me-2"></i>Coleta Anônima
+</h5>
+</div>
+<div class="modal-body">
+<p>
+Ativar telemetria ajuda a melhorar a ferramenta. Nenhum dado
+pessoal é enviado.
+</p>
+</div>
+<div class="modal-footer">
+<button
+type="button"
+class="btn btn-outline-secondary"
+onclick="closeTelemetry(false)"
+>
+Não, obrigado
+</button>
+<button
+type="button"
+class="btn btn-primary"
+onclick="closeTelemetry(true)"
+>
+Ativar
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- ⚙️ [MODAL CONFIGURAÇÕES] Formulário modal para personalização avançada, incluindo mapeamento de atalhos JSON, limite de retries e políticas de privacidade de CPF -->
+<div class="modal fade" id="configModal" tabindex="-1">
+<div class="modal-dialog">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title">
+<i class="bi bi-gear me-2"></i>Configurações
+</h5>
+<button
+type="button"
+class="btn-close"
+data-bs-dismiss="modal"
+></button>
+</div>
+<div class="modal-body">
+<form id="configForm">
+<div class="mb-3">
+<label class="form-label">Atalhos Customizados (JSON)</label>
+<textarea
+class="form-control"
+rows="3"
+placeholder='{ "GOI_CHECK": "g" }'
+></textarea>
+</div>
+<div class="mb-3">
+<label class="form-label">Tentativas de Retry</label>
+<input
+type="number"
+class="form-control"
+value="3"
+min="0"
+max="10"
+/>
+</div>
+<div class="mb-3">
+<label class="form-label">Privacidade (CPF)</label>
+<select class="form-select">
+<option value="off">Desativado</option>
+<option value="hover">Mostrar ao passar o mouse</option>
+</select>
+</div>
+</form>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-outline-secondary">
+Importar/Exportar
+</button>
+<button
+type="button"
+class="btn btn-primary"
+data-bs-dismiss="modal"
+>
+Salvar
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- 🐛 [DEBUG PANEL] Botão flutuante posicionado no canto inferior direito para acesso rápido ao painel de depuração e troubleshooting -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1050">
+<button class="btn btn-dark btn-sm shadow" onclick="toggleDebug()">
+<i class="bi bi-bug me-1"></i> Debug
+</button>
+</div>
+<!-- 📜 [SCRIPTS] Carregamento do pacote de interação do Bootstrap (JS Bundle) e script principal da aplicação contendo a lógica de automação -->
+<!-- Bootstrap JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Custom JS -->
+<script src="js/app.js"></script>
+</body>
+</html>
