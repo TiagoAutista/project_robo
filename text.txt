@@ -1,18 +1,1 @@
-🤖 Robô WFM CSV Iniciado...
-📋 3 ordens encontradas para processar.
-
-💡 Se o sistema pedir login, faça manualmente na janela que abriu.
-
-[1/3] 🔍 Consultando Ordem: 7404561957
-   ❌ Erro: net::ERR_BLOCKED_BY_CLIENT at http://appwfm.gvt.net.br/wfm-search/detalhesWorkOrder.xhtml?wo=7404561957
-
-[2/3] 🔍 Consultando Ordem: 1234567890
-   ❌ Erro: net::ERR_BLOCKED_BY_CLIENT at http://appwfm.gvt.net.br/wfm-search/detalhesWorkOrder.xhtml?wo=1234567890
-
-[3/3] 🔍 Consultando Ordem: 9876543210
-   ❌ Erro: net::ERR_BLOCKED_BY_CLIENT at http://appwfm.gvt.net.br/wfm-search/detalhesWorkOrder.xhtml?wo=9876543210
-
-💾 Resultados salvos em: resultado_consulta.csv
-✅ Com CPF: 0 | ❌ Sem CPF/Erro: 3
-
-🏁 Robô finalizado.
+npm install puppeteer-extra puppeteer-extra-plugin-stealth
