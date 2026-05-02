@@ -1,0 +1,6 @@
+Quero trocar esse link const URL_BASE = 'http://127.0.0.1:5500/index.html'; // Seu link local
+por esse 
+
+http://appwfm.gvt.net.br/wfm-search/detalhesWorkOrder.xhtml?wo=6984826654
+
+E tambem quero que depois do = seja verificado as ordens na base cls.
